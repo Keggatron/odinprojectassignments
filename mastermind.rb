@@ -110,7 +110,7 @@ class MasterMind
   
   def game_over
       
-    if @mind_code == @code
+    if (@mind_code) || (@comp_code) == @code
         puts "Congratulations you win!"
         true
         
@@ -123,12 +123,11 @@ class MasterMind
     end
   end
   
-  def board_fill #Filling the board as the player guesses
+  def board_fill #Filling the board as the player or computer guesses
       if @turn_count == 2
-          @board[0..3] = @guess? @mind_code[0..3] : @comp_code[0..3]
-          
+          @board[0..3] = (@guess)? (@mind_code[0..3]) : (@comp_code[0..3])
       else
-          @board[(0 + (@turn_count - 2) *4)..(3  + (@turn_count - 1) *4)] = @guess? @mind_code[0..3] : @comp_code[0..3]
+          @board[(0 + (@turn_count - 2) *4)..(3  + (@turn_count - 1) *4)] = (@guess)? (@mind_code[0..3]) : (@comp_code[0..3])
       end
   end
   
@@ -151,7 +150,7 @@ class MasterMind
         end
     }
     @comp_code = @comp_matches.flatten
-  end
+ end
 end
 
 
@@ -159,50 +158,3 @@ end
 game = MasterMind.new
 game.game_play
 
-=begin def pcode
-    puts "Enter the code "
-    @mind_code = gets.chomp!   
-    if @mind_code.length > 4 then
-        puts "Your code is too long, please enter only 4 numbers:"
-        pcode
-    end
-        
-    if @mind_code.length < 4 then
-        puts "Your code is too short, please enter 4 numbers:"
-        pcode
-    end    
-    @mind_code = @mind_code.to_s.split('').map(&:to_i)
-    
-    print @mind_code
-  end
-pcode
-
-#@comp_matches = [1,2,3]
-#@comp_code = @comp_matches + (1..8).to_a.shuffle.take(4 - @comp_matches.length)
-#@comp_code = (1..8).to_a.shuffle.take(4)
-#print @comp_code
-
-
-@comp_matches = [9,9,9,9] #making the values equal nine because they aren't part of the guess range, so they should never be part of the code. 
-@matched_array = (1..8).to_a
- @comp_code = [1,2,5,3]
- @code = [0,2,5,4]
-    @comp_code.each_with_index {|x, n| 
-        if @code[n] == @comp_code[n]
-            @comp_matches[n] = x
-            @matched_array.delete(x)
-        end
-    }
-
-
-@comp_matches.each_with_index {|x, y| 
-    if x == 9 
-        @comp_matches[y] = @matched_array.to_a.shuffle.take(1){
-           redo if @comp_matches.include?(@comp_matches[y])
-        }
-    end
-}
-
-@comp_code = @comp_matches.flatten
-print @comp_code
-=end
